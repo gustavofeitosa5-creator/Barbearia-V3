@@ -107,14 +107,6 @@ export default function HistoricoPage({ navigate, goBack }: HistoricoPageProps) 
             Olá, {perfil?.nome_usuario?.split(' ')[0]}! Aqui estão todos os seus agendamentos.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button className="btn btn-primary" onClick={() => navigate('agendar')}>
-            + Novo Agendamento
-          </button>
-          <button className="btn btn-secondary" onClick={() => goBack ? goBack() : navigate('index')}>
-            ← Voltar
-          </button>
-        </div>
       </div>
 
       {erro && (
@@ -140,6 +132,14 @@ export default function HistoricoPage({ navigate, goBack }: HistoricoPageProps) 
           </button>
         </div>
       ) : (
+        <div className="section-header" style={{ marginBottom: 20 }}>
+          <div>
+            <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: 'var(--text-primary)' }}>Seus Agendamentos</h2>
+          </div>
+          <button className="btn btn-primary" onClick={() => navigate('agendar')}>
+            + Novo Agendamento
+          </button>
+        </div>
         <div className="table-wrapper">
           <table>
             <thead>

@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { formatarTelefone, validarTelefone, extrairDigitos } from '../utils/phone';
-import { Scissors, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Scissors, AlertTriangle, CheckCircle, ArrowLeft } from 'lucide-react';
 
 interface AuthPageProps {
   navigate: (to: string) => void;
   mensagem?: string;
+  goBack?: () => void;
 }
 
-export default function AuthPage({ navigate, mensagem }: AuthPageProps) {
+export default function AuthPage({ navigate, mensagem, goBack }: AuthPageProps) {
   const { login, cadastro, recuperarSenha, perfil, user } = useAuth();
   const [aba, setAba] = useState<'login' | 'cadastro'>('login');
-
-  // Login state
   const [loginEmail, setLoginEmail] = useState('');
   const [loginSenha, setLoginSenha] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
@@ -112,6 +111,15 @@ export default function AuthPage({ navigate, mensagem }: AuthPageProps) {
   return (
     <div className="auth-page">
       <div className="auth-container">
+        <button 
+          type="button"
+          className="btn btn-icon btn-secondary"
+          onClick={goBack || (() => navigate('index'))}
+          aria-label="Voltar"
+          style={{ position: 'absolute', top: 20, left: 20 }}
+        >
+          <ArrowLeft size={20} />
+        </button>
         <div className="auth-logo">
           <h1 style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
             <Scissors size={32} /> BarberSync

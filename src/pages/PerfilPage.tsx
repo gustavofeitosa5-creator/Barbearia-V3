@@ -64,10 +64,6 @@ export default function PerfilPage({ navigate }: PerfilPageProps) {
           <h1 className="page-title">Meu Perfil</h1>
           <p className="page-subtitle">Atualize suas informações e mantenha seus dados de contato corretos.</p>
         </div>
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <button className="btn btn-secondary" onClick={() => navigate('historico')}>Meus Agendamentos</button>
-          <button className="btn btn-secondary" onClick={handleLogout}><LogOut size={16} style={{ marginRight: 8 }} /> Sair</button>
-        </div>
       </div>
 
       <div className="profile-card">
@@ -94,7 +90,9 @@ export default function PerfilPage({ navigate }: PerfilPageProps) {
               className="form-control"
               value={perfil.email_usuario || ''}
               readOnly
+              disabled
             />
+            <span className="form-hint">O e-mail não pode ser alterado.</span>
           </div>
 
           <div className="profile-field">
@@ -105,15 +103,13 @@ export default function PerfilPage({ navigate }: PerfilPageProps) {
               value={telefone}
               onChange={e => setTelefone(aplicarMascaraTelefone(e.target.value))}
               placeholder="(00) 00000-0000"
+              maxLength={15}
             />
           </div>
 
           <div className="profile-actions">
             <button type="submit" className="btn btn-primary" disabled={salvando}>
               {salvando ? 'Salvando...' : 'Salvar alterações'}
-            </button>
-            <button type="button" className="btn btn-secondary" onClick={() => navigate('agendar')}>
-              Voltar para agendar
             </button>
           </div>
         </form>

@@ -1,38 +1,60 @@
 /* ============================================================
    BarberSync — Sistema de Agendamento para Barbearia
-   CSS Global — Dark Theme com paleta dourado/âmbar
+   CSS Global — Light Theme Moderno com paleta suave
    ============================================================ */
 
 :root {
-  --bg-primary: #0f0f0f;
-  --bg-surface: #1a1a1a;
-  --bg-card: #1e1e1e;
-  --bg-input: #242424;
-  --border: #2e2e2e;
-  --border-light: #3a3a3a;
-  --color-primary: #c9a84c;
-  --color-primary-hover: #e0bc6a;
-  --color-primary-dim: rgba(201, 168, 76, 0.15);
-  --text-primary: #e8e8e8;
-  --text-secondary: #a0a0a0;
-  --text-muted: #6a6a6a;
-  --success: #4caf7a;
-  --success-bg: rgba(76, 175, 122, 0.12);
-  --error: #e05555;
-  --error-bg: rgba(224, 85, 85, 0.12);
-  --warning: #e0a84c;
-  --warning-bg: rgba(224, 168, 76, 0.12);
-  --info: #4ca8e0;
-  --info-bg: rgba(76, 168, 224, 0.12);
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --radius: 10px;
-  --radius-sm: 6px;
-  --radius-lg: 16px;
-  --navbar-height: 64px;
+  /* Paleta de cores clara e moderna */
+  --bg-primary: #fafafa;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-input: #f5f5f7;
+  --border: #e5e5e7;
+  --border-light: #d1d1d6;
+  
+  /* Cores primárias - tons de âmbar/dourado sofisticados */
+  --color-primary: #b8943b;
+  --color-primary-hover: #a08030;
+  --color-primary-dim: rgba(184, 148, 59, 0.1);
+  --color-primary-light: rgba(184, 148, 59, 0.05);
+  
+  /* Tipografia */
+  --text-primary: #1d1d1f;
+  --text-secondary: #6e6e73;
+  --text-muted: #98989d;
+  
+  /* Cores de estado */
+  --success: #34c759;
+  --success-bg: rgba(52, 199, 89, 0.1);
+  --error: #ff3b30;
+  --error-bg: rgba(255, 59, 48, 0.08);
+  --warning: #ff9500;
+  --warning-bg: rgba(255, 149, 0, 0.08);
+  --info: #007aff;
+  --info-bg: rgba(0, 122, 255, 0.08);
+  
+  /* Sombras suaves e modernas */
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.15);
+  
+  /* Bordas arredondadas */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  
+  /* Altura da navbar */
+  --navbar-height: 70px;
+  
+  /* Fontes */
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --transition: all 0.2s ease;
+  
+  /* Transições suaves */
+  --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 *, *::before, *::after {
@@ -49,10 +71,11 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: var(--font-sans);
-  font-size: 15px;
-  line-height: 1.6;
+  font-size: 15.5px;
+  line-height: 1.65;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 a {
@@ -141,12 +164,13 @@ img { max-width: 100%; }
   left: 0;
   right: 0;
   height: var(--navbar-height);
-  background: rgba(15, 15, 15, 0.97);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px) saturate(180%);
   border-bottom: 1px solid var(--border);
   z-index: 1000;
   display: flex;
   align-items: center;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
 }
 
 .navbar-inner {
@@ -154,50 +178,56 @@ img { max-width: 100%; }
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 }
 
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   font-family: var(--font-serif);
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: var(--color-primary);
   font-weight: 700;
   cursor: pointer;
   border: none;
   background: none;
+  transition: var(--transition);
+}
+
+.navbar-brand:hover {
+  opacity: 0.85;
 }
 
 .navbar-brand .brand-icon {
-  font-size: 1.5rem;
+  font-size: 1.6rem;
 }
 
 .navbar-links {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .nav-link {
   background: none;
   border: none;
   color: var(--text-secondary);
-  padding: 8px 14px;
+  padding: 10px 16px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-family: var(--font-sans);
+  font-weight: 500;
   transition: var(--transition);
   white-space: nowrap;
 }
 
 .nav-link:hover {
   color: var(--text-primary);
-  background: var(--bg-surface);
+  background: var(--bg-input);
 }
 
 .nav-link.active {
@@ -322,23 +352,29 @@ img { max-width: 100%; }
 }
 
 .btn-primary {
-  background: var(--color-primary);
-  color: #0f0f0f;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  color: #ffffff;
   font-weight: 600;
+  box-shadow: 0 2px 8px rgba(184, 148, 59, 0.25);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: var(--color-primary-hover);
+  background: linear-gradient(135deg, var(--color-primary-hover) 0%, var(--color-primary) 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(184, 148, 59, 0.35);
 }
 
 .btn-secondary {
-  background: var(--bg-input);
+  background: var(--bg-surface);
   color: var(--text-primary);
-  border: 1px solid var(--border-light);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: var(--border);
+  background: var(--bg-input);
+  border-color: var(--border-light);
+  transform: translateY(-1px);
 }
 
 .btn-danger {

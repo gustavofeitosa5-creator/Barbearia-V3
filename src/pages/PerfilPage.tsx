@@ -59,44 +59,65 @@ export default function PerfilPage({ navigate }: PerfilPageProps) {
 
   return (
     <div className="page">
-      <div className="section-header" style={{ alignItems: 'flex-start', gap: 16 }}>
+      <div className="section-header">
         <div>
           <h1 className="page-title">Meu Perfil</h1>
-          <p className="page-subtitle">Atualize suas informações e mantenha seus dados de contato corretos.</p>
+          <p className="page-subtitle">Atualize suas informações pessoais e mantenha seus dados de contato sempre corretos.</p>
         </div>
       </div>
 
       <div className="profile-card">
-        {erro && <div className="alert alert-error">❌ {erro}</div>}
-        {sucesso && <div className="alert alert-success">✅ {sucesso}</div>}
+        {erro && (
+          <div className="alert alert-error">
+            <span>{erro}</span>
+            <button 
+              style={{ marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--error)', padding: 0 }} 
+              onClick={() => setErro('')}
+              aria-label="Fechar"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+        {sucesso && <div className="alert alert-success">{sucesso}</div>}
 
         <form onSubmit={handleSalvar} noValidate>
           <div className="profile-field">
-            <label className="profile-label"><User size={16} /> Nome completo</label>
+            <label className="profile-label">
+              <User size={18} />
+              Nome completo
+            </label>
             <input
               type="text"
               className="form-control"
               value={nome}
               onChange={e => setNome(e.target.value)}
-              placeholder="Seu nome"
+              placeholder="Digite seu nome completo"
               required
             />
           </div>
 
           <div className="profile-field">
-            <label className="profile-label"><Mail size={16} /> E-mail</label>
+            <label className="profile-label">
+              <Mail size={18} />
+              E-mail
+            </label>
             <input
               type="email"
               className="form-control"
               value={perfil.email_usuario || ''}
               readOnly
               disabled
+              style={{ opacity: 0.6, cursor: 'not-allowed' }}
             />
             <span className="form-hint">O e-mail não pode ser alterado.</span>
           </div>
 
           <div className="profile-field">
-            <label className="profile-label"><Phone size={16} /> Telefone</label>
+            <label className="profile-label">
+              <Phone size={18} />
+              Telefone
+            </label>
             <input
               type="tel"
               className="form-control"
@@ -109,7 +130,17 @@ export default function PerfilPage({ navigate }: PerfilPageProps) {
 
           <div className="profile-actions">
             <button type="submit" className="btn btn-primary" disabled={salvando}>
-              {salvando ? 'Salvando...' : 'Salvar alterações'}
+              {salvando ? (
+                <>
+                  <span className="spinner-sm" style={{ marginRight: 8 }}></span>
+                  Salvando...
+                </>
+              ) : (
+                <>
+                  <Save size={18} style={{ marginRight: 8 }} />
+                  Salvar alterações
+                </>
+              )}
             </button>
           </div>
         </form>

@@ -107,14 +107,6 @@ export default function HistoricoPage({ navigate, goBack }: HistoricoPageProps) 
             Olá, {perfil?.nome_usuario?.split(' ')[0]}! Aqui estão todos os seus agendamentos.
           </p>
         </div>
-        <div style={{ display: 'flex', gap: 12 }}>
-          <button className="btn btn-primary" onClick={() => navigate('agendar')}>
-            + Novo Agendamento
-          </button>
-          <button className="btn btn-secondary" onClick={() => goBack ? goBack() : navigate('index')}>
-            ← Voltar
-          </button>
-        </div>
       </div>
 
       {erro && (
@@ -140,85 +132,95 @@ export default function HistoricoPage({ navigate, goBack }: HistoricoPageProps) 
           </button>
         </div>
       ) : (
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Data</th>
-                <th>Horário</th>
-                <th>Barbeiro</th>
-                <th>Serviços</th>
-                <th>Valor Total</th>
-                <th>Status</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-            <tbody>
-              {agendamentos.map(ag => {
-                const barbeiro = ag.tb_barbeiro as { id_barbeiro: number; nome_barbeiro: string } | undefined;
-                const passado = isDataPassada(ag.data_agendamento, ag.hora_agendamento);
-                return (
-                  <tr key={ag.id_agendamento} style={{ opacity: ag.status_agendamento === 'cancelado' ? 0.6 : 1 }}>
-                    <td style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>#{ag.id_agendamento}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}>{formatarData(ag.data_agendamento)}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}>
-                      <strong style={{ color: 'var(--color-primary)' }}>
-                        {formatarHora(ag.hora_agendamento)}
-                      </strong>
-                    </td>
-                    <td>{barbeiro?.nome_barbeiro || '—'}</td>
-                    <td>
-                      <div className="tags-list">
-                        {getServicos(ag).map((s, i) => (
-                          <span key={i} className="tag">{s}</span>
-                        ))}
-                        {getServicos(ag).length === 0 && <span style={{ color: 'var(--text-muted)' }}>—</span>}
-                      </div>
-                    </td>
-                    <td>
-                      <strong style={{ color: 'var(--color-primary)' }}>
-                        {formatarPreco(getValorTotal(ag))}
-                      </strong>
-                    </td>
-                    <td>
-                      <span className={getBadgeClass(ag.status_agendamento)}>
-                        {ag.status_agendamento}
-                      </span>
-                      {passado && ag.status_agendamento !== 'cancelado' && (
-                        <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>
-                          Realizado
+        <>
+          <div className="section-header" style={{ marginBottom: 20 }}>
+            <div>
+              <h2 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.3rem', color: 'var(--text-primary)' }}>Seus Agendamentos</h2>
+            </div>
+            <button className="btn btn-primary" onClick={() => navigate('agendar')}>
+              + Novo Agendamento
+            </button>
+          </div>
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Data</th>
+                  <th>Horário</th>
+                  <th>Barbeiro</th>
+                  <th>Serviços</th>
+                  <th>Valor Total</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                {agendamentos.map(ag => {
+                  const barbeiro = ag.tb_barbeiro as { id_barbeiro: number; nome_barbeiro: string } | undefined;
+                  const passado = isDataPassada(ag.data_agendamento, ag.hora_agendamento);
+                  return (
+                    <tr key={ag.id_agendamento} style={{ opacity: ag.status_agendamento === 'cancelado' ? 0.6 : 1 }}>
+                      <td style={{ color: 'var(--text-muted)', fontSize: '0.82rem' }}>#{ag.id_agendamento}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>{formatarData(ag.data_agendamento)}</td>
+                      <td style={{ whiteSpace: 'nowrap' }}>
+                        <strong style={{ color: 'var(--color-primary)' }}>
+                          {formatarHora(ag.hora_agendamento)}
+                        </strong>
+                      </td>
+                      <td>{barbeiro?.nome_barbeiro || '—'}</td>
+                      <td>
+                        <div className="tags-list">
+                          {getServicos(ag).map((s, i) => (
+                            <span key={i} className="tag">{s}</span>
+                          ))}
+                          {getServicos(ag).length === 0 && <span style={{ color: 'var(--text-muted)' }}>—</span>}
+                        </div>
+                      </td>
+                      <td>
+                        <strong style={{ color: 'var(--color-primary)' }}>
+                          {formatarPreco(getValorTotal(ag))}
+                        </strong>
+                      </td>
+                      <td>
+                        <span className={getBadgeClass(ag.status_agendamento)}>
+                          {ag.status_agendamento}
                         </span>
-                      )}
-                    </td>
-                    <td>
-                      <div className="td-actions">
-                        <button
-                          className="btn btn-secondary btn-sm"
-                          onClick={() => handleReagendar(ag)}
-                          title="Reagendar com os mesmos dados"
-                        >
-                          🔄 Reagendar
-                        </button>
-                        {podeCancel(ag) && (
-                          <button
-                            className="btn btn-danger btn-sm"
-                            onClick={() => handleCancelar(ag)}
-                            disabled={cancelando === ag.id_agendamento}
-                          >
-                            {cancelando === ag.id_agendamento
-                              ? <span className="spinner-sm"></span>
-                              : '✕ Cancelar'}
-                          </button>
+                        {passado && ag.status_agendamento !== 'cancelado' && (
+                          <span style={{ display: 'block', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 2 }}>
+                            Realizado
+                          </span>
                         )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td>
+                        <div className="td-actions">
+                          <button
+                            className="btn btn-secondary btn-sm"
+                            onClick={() => handleReagendar(ag)}
+                            title="Reagendar com os mesmos dados"
+                          >
+                            🔄 Reagendar
+                          </button>
+                          {podeCancel(ag) && (
+                            <button
+                              className="btn btn-danger btn-sm"
+                              onClick={() => handleCancelar(ag)}
+                              disabled={cancelando === ag.id_agendamento}
+                            >
+                              {cancelando === ag.id_agendamento
+                                ? <span className="spinner-sm"></span>
+                                : '✕ Cancelar'}
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
     </div>
   );

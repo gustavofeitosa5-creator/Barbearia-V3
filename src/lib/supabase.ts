@@ -92,6 +92,45 @@ export function isDataPassada(data: string, hora: string): boolean {
   return dataHora < agora;
 }
 
+/**
+ * Verifica se a data informada (formato YYYY-MM-DD) é "amanhã" em relação à data atual.
+ */
+export function isAmanha(dataISO: string): boolean {
+  if (!dataISO) return false;
+  
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  
+  const amanha = new Date(hoje);
+  amanha.setDate(hoje.getDate() + 1);
+  
+  const dataInformada = new Date(dataISO);
+  dataInformada.setHours(0, 0, 0, 0);
+  
+  return dataInformada.getTime() === amanha.getTime();
+}
+
+/**
+ * Verifica se a data informada (formato YYYY-MM-DD) é no passado.
+ */
+export function isDataNoPassado(dataISO: string): boolean {
+  if (!dataISO) return false;
+  
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  
+  const dataInformada = new Date(dataISO);
+  dataInformada.setHours(0, 0, 0, 0);
+  
+  return dataInformada < hoje;
+}
+
 export function getHojeISO(): string {
   return new Date().toISOString().split('T')[0];
+}
+
+export function getAmanhaISO(): string {
+  const hoje = new Date();
+  hoje.setDate(hoje.getDate() + 1);
+  return hoje.toISOString().split('T')[0];
 }

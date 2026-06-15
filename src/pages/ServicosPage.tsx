@@ -63,7 +63,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
       .order('id_servico', { ascending: true });
 
     if (error) {
-      setErro('Erro ao carregar serviÃ§os: ' + error.message);
+      setErro('Erro ao carregar serviços: ' + error.message);
     } else {
       setServicos((data || []) as Servico[]);
     }
@@ -90,15 +90,15 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
     setFormErro('');
 
     if (!formTipo.trim()) {
-      setFormErro('Nome do serviÃ§o Ã© obrigatÃ³rio.');
+      setFormErro('Nome do serviço é obrigatório.');
       return;
     }
     if (!formPreco || isNaN(parseFloat(formPreco))) {
-      setFormErro('PreÃ§o invÃ¡lido.');
+      setFormErro('Preço inválido.');
       return;
     }
     if (!formDuracao.trim()) {
-      setFormErro('DuraÃ§Ã£o Ã© obrigatÃ³ria.');
+      setFormErro('Duração é obrigatória.');
       return;
     }
 
@@ -116,7 +116,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
       return;
     }
 
-    setSucesso('ServiÃ§o cadastrado com sucesso!');
+    setSucesso('Serviço cadastrado com sucesso!');
     setShowForm(false);
     setFormTipo('');
     setFormDesc('');
@@ -150,11 +150,11 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
     setEditErro('');
 
     if (!editTipo.trim()) {
-      setEditErro('Nome Ã© obrigatÃ³rio.');
+      setEditErro('Nome é obrigatório.');
       return;
     }
     if (!editPreco || isNaN(parseFloat(editPreco))) {
-      setEditErro('PreÃ§o invÃ¡lido.');
+      setEditErro('Preço inválido.');
       return;
     }
 
@@ -175,7 +175,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
       return;
     }
 
-    setSucesso('ServiÃ§o atualizado com sucesso!');
+    setSucesso('Serviço atualizado com sucesso!');
     setEditando(null);
     await carregarServicos();
     setTimeout(() => setSucesso(''), 4000);
@@ -188,10 +188,10 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
       .eq('tb_servico_id_servico', id);
 
     if (count && count > 0) {
-      setErro(`NÃ£o Ã© possÃ­vel excluir este serviÃ§o: existem ${count} agendamento(s) vinculado(s) a ele.`);
+      setErro(`Não é possível excluir este serviço: existem ${count} agendamento(s) vinculado(s) a ele.`);
       return;
     }
-    if (!confirm('Confirmar exclusÃ£o do serviÃ§o?')) return;
+    if (!confirm('Confirmar exclusão do serviço?')) return;
 
     const { error } = await supabase.from('tb_servico').delete().eq('id_servico', id);
     if (error) {
@@ -199,7 +199,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
       return;
     }
 
-    setSucesso('ServiÃ§o excluÃ­do com sucesso!');
+    setSucesso('Serviço excluído com sucesso!');
     await carregarServicos();
     setTimeout(() => setSucesso(''), 4000);
   }
@@ -208,16 +208,16 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
     <div className="page">
       <div className="section-header">
         <div>
-          <h1 className="page-title">{showAdminControls ? 'Gerenciar ServiÃ§os' : 'ServiÃ§os e PreÃ§os'}</h1>
+          <h1 className="page-title">{showAdminControls ? 'Gerenciar Serviços' : 'Serviços e Preços'}</h1>
           <p className="page-subtitle">
             {showAdminControls
-              ? 'Cadastre, edite e gerencie os serviÃ§os oferecidos pela barbearia.'
-              : 'ConheÃ§a nossos serviÃ§os e preÃ§os. Agende com facilidade!'}
+              ? 'Cadastre, edite e gerencie os serviços oferecidos pela barbearia.'
+              : 'Conheça nossos serviços e preços. Agende com facilidade!'}
           </p>
         </div>
         {showAdminControls && (
           <button type="button" className="btn btn-primary" onClick={() => { setShowForm(!showForm); setFormErro(''); }}>
-            {showForm ? <><X size={18} /> Cancelar</> : <><Plus size={18} /> Novo ServiÃ§o</>}
+            {showForm ? <><X size={18} /> Cancelar</> : <><Plus size={18} /> Novo Serviço</>}
           </button>
         )}
       </div>
@@ -236,7 +236,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
         <input
           type="search"
           className="form-control"
-          placeholder="Buscar serviÃ§o ou descriÃ§Ã£o..."
+          placeholder="Buscar serviço ou descrição..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
           style={{ flex: '1 1 280px', minWidth: 0 }}
@@ -248,12 +248,12 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
 
       {showAdminControls && showForm && (
         <div className="card" style={{ marginBottom: 32 }}>
-          <h3 className="card-title" style={{ marginBottom: 20 }}>Novo ServiÃ§o</h3>
+          <h3 className="card-title" style={{ marginBottom: 20 }}>Novo Serviço</h3>
           <form onSubmit={handleCadastrar} noValidate>
             {formErro && <div className="alert alert-error"><AlertTriangle size={20} /> {formErro}</div>}
             <div className="form-row">
               <div className="form-group">
-                <label className="form-label">Nome do serviÃ§o <span className="required">*</span></label>
+                <label className="form-label">Nome do serviço <span className="required">*</span></label>
                 <input
                   type="text"
                   className="form-control"
@@ -264,7 +264,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
                 />
               </div>
               <div className="form-group">
-                <label className="form-label">PreÃ§o (R$) <span className="required">*</span></label>
+                <label className="form-label">Preço (R$) <span className="required">*</span></label>
                 <input
                   type="number"
                   className="form-control"
@@ -279,7 +279,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
             </div>
             <div className="form-row">
               <div className="form-group">
-                <label className="form-label">DuraÃ§Ã£o <span className="required">*</span></label>
+                <label className="form-label">Duração <span className="required">*</span></label>
                 <input
                   type="text"
                   className="form-control"
@@ -291,11 +291,11 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
                 <span className="form-hint">Digite em minutos ou horas:minutos</span>
               </div>
               <div className="form-group">
-                <label className="form-label">DescriÃ§Ã£o</label>
+                <label className="form-label">Descrição</label>
                 <input
                   type="text"
                   className="form-control"
-                  placeholder="Breve descriÃ§Ã£o do serviÃ§o"
+                  placeholder="Breve descrição do serviço"
                   value={formDesc}
                   onChange={e => setFormDesc(e.target.value)}
                 />
@@ -303,7 +303,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
             </div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
               <button type="submit" className="btn btn-primary" disabled={formLoading}>
-                {formLoading ? 'Salvando...' : 'Cadastrar ServiÃ§o'}
+                {formLoading ? 'Salvando...' : 'Cadastrar Serviço'}
               </button>
               <button type="button" className="btn btn-secondary" onClick={() => setShowForm(false)}>
                 Cancelar
@@ -316,13 +316,13 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
       {loading ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: 'var(--text-muted)', padding: 40 }}>
           <div className="loading-spinner" style={{ width: 24, height: 24, borderWidth: 2 }}></div>
-          Carregando serviÃ§os...
+          Carregando serviços...
         </div>
       ) : servicosFiltrados.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '60px 20px', background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: 'var(--radius)', color: 'var(--text-secondary)' }}>
           <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'center' }}><Briefcase size={64} strokeWidth={1.5} /></div>
-          <h3 style={{ fontFamily: 'var(--font-serif)', marginBottom: 8 }}>{servicos.length === 0 ? 'Nenhum serviÃ§o cadastrado' : 'Nenhum serviÃ§o encontrado'}</h3>
-          <p>{servicos.length === 0 ? (showAdminControls ? 'Clique em "+ Novo ServiÃ§o" para comeÃ§ar.' : 'Em breve nossos serviÃ§os estarÃ£o disponÃ­veis.') : 'Ajuste sua busca para ver resultados.'}</p>
+          <h3 style={{ fontFamily: 'var(--font-serif)', marginBottom: 8 }}>{servicos.length === 0 ? 'Nenhum serviço cadastrado' : 'Nenhum serviço encontrado'}</h3>
+          <p>{servicos.length === 0 ? (showAdminControls ? 'Clique em "+ Novo Serviço" para começar.' : 'Em breve nossos serviços estarão disponíveis.') : 'Ajuste sua busca para ver resultados.'}</p>
         </div>
       ) : (
         <div className="servicos-grid">
@@ -347,7 +347,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
               )}
               {showAdminControls && editando === servico.id_servico && (
                 <div className="inline-form" style={{ marginTop: 18 }}>
-                  <h4 style={{ color: 'var(--color-primary)', marginBottom: 16, fontSize: '0.95rem' }}>Editar ServiÃ§o</h4>
+                  <h4 style={{ color: 'var(--color-primary)', marginBottom: 16, fontSize: '0.95rem' }}>Editar Serviço</h4>
                   <form onSubmit={handleEditar} noValidate>
                     {editErro && <div className="alert alert-error" style={{ marginBottom: 12 }}><AlertTriangle size={20} /> {editErro}</div>}
                     <div className="form-row">
@@ -356,17 +356,17 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
                         <input type="text" className="form-control" value={editTipo} onChange={e => setEditTipo(e.target.value)} required />
                       </div>
                       <div className="form-group">
-                        <label className="form-label">PreÃ§o (R$) <span className="required">*</span></label>
+                        <label className="form-label">Preço (R$) <span className="required">*</span></label>
                         <input type="number" className="form-control" value={editPreco} onChange={e => setEditPreco(e.target.value)} min="0" step="0.01" required />
                       </div>
                     </div>
                     <div className="form-row">
                       <div className="form-group">
-                        <label className="form-label">DuraÃ§Ã£o</label>
+                        <label className="form-label">Duração</label>
                         <input type="text" className="form-control" placeholder="Ex: 30 ou 1:30" value={editDuracao} onChange={e => setEditDuracao(e.target.value)} />
                       </div>
                       <div className="form-group">
-                        <label className="form-label">DescriÃ§Ã£o</label>
+                        <label className="form-label">Descrição</label>
                         <input type="text" className="form-control" value={editDesc} onChange={e => setEditDesc(e.target.value)} />
                       </div>
                     </div>
@@ -375,7 +375,7 @@ export default function ServicosPage({ navigate, adminMode = false }: ServicosPa
                         {editLoading ? 'Salvando...' : <><Save size={16} style={{ marginRight: 4 }} /> Salvar</>}
                       </button>
                       <button type="button" className="btn btn-secondary btn-sm" onClick={() => setEditando(null)}>
-                        Cancelar ediÃ§Ã£o
+                        Cancelar edição
                       </button>
                     </div>
                   </form>

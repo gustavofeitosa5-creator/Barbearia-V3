@@ -37,6 +37,13 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
   const amanha = getAmanhaISO();
   const isReagendamento = params.reagendar === '1';
 
+  // Função para verificar se uma data é passada
+  function isDataPassada(dataStr: string): boolean {
+    const hojeDate = new Date(hoje + 'T00:00:00');
+    const dataDate = new Date(dataStr + 'T00:00:00');
+    return dataDate < hojeDate;
+  }
+
   // Verificar se o usuário logado é um barbeiro e obter seu ID
   const usuarioEhBarbeiro = perfil?.tipo_usuario === 'barbeiro';
   const idBarbeiroLogado = usuarioEhBarbeiro ? perfil?.id_usuario : null;
@@ -105,7 +112,17 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
       // 4. Filtrar horários
       const agora = new Date();
       const isHoje = data === hoje;
-      const isAmanha = data === amanha;
+      const dataSelecionada = new Date(data + 'T00:00:00');
+      const hojeDate = new Date(hoje + 'T00:00:00');
+      const amanhaDate = new Date(amanha + 'T00:00:00');
+      
+      // Se a data for passada ou for amanhã, não mostra horários
+      if (dataSelecionada < hojeDate || dataSelecionada.getTime() === amanhaDate.getTime()) {
+        setHorariosDisponiveis([]);
+        setLoadingHorarios(false);
+        setHorariosCarregados(true);
+        return;
+      }
 
       const disponiveis = HORARIOS_FUNCIONAMENTO.filter(horario => {
         // Verificar se está ocupado
@@ -118,9 +135,6 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
           horarioDate.setHours(hh, mm, 0, 0);
           if (horarioDate <= agora) return false;
         }
-
-        // Se for amanhã, não mostra nenhum horário (indisponível)
-        if (isAmanha) return false;
 
         // Verificar bloqueios de intervalo
         for (const bloqueio of (bloqueios || [])) {
@@ -177,7 +191,8 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
     // Validações client-side
     if (!barbeiroId) { setErro('Selecione um barbeiro.'); return; }
     if (!data) { setErro('Selecione uma data.'); return; }
-    if (data < hoje) { setErro('Não é possível agendar para datas passadas.'); return; }
+    if (isDataPassada(data)) { setErro('Não é possível agendar para datas passadas.'); return; }
+    if (data === amanha) { setErro('Não é possível agendar para amanhã. Selecione outra data.'); return; }
     if (!horarioSelecionado) { setErro('Selecione um horário.'); return; }
     if (servicosSelecionados.length === 0) { setErro('Selecione pelo menos um serviço.'); return; }
 
@@ -444,11 +459,6 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
                 <div className="horarios-loading">
                   <span className="spinner-sm"></span>
                   Verificando disponibilidade...
-                </div>
-              ) : data === amanha ? (
-                <div className="alert alert-warning">
-                  <AlertTriangle size={18} style={{ flexShrink: 0 }} />
-                  Não é possível agendar para amanhã. Selecione outra data.
                 </div>
               ) : horariosCarregados && horariosDisponiveis.length === 0 ? (
                 <div className="alert alert-warning">

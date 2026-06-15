@@ -51,6 +51,12 @@ function AppInner() {
       const initialPage = hashPage || (pathPage === '/auth' ? 'auth' : 'index');
       setPage(initialPage);
       pageHistoryRef.current = [initialPage];
+      
+      // Aplica o tema salvo ou preferido pelo sistema
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
     }
   }, [loading]);
 

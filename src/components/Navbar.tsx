@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { ArrowLeft, Scissors, Menu, X, User, LogOut, ChevronRight, Calendar, Clock, DollarSign } from 'lucide-react';
+import { ArrowLeft, Scissors, Menu, X, User, LogOut, Calendar, Clock, DollarSign, Moon, Sun } from 'lucide-react';
 
 interface NavbarProps {
   navigate: (to: string, params?: Record<string, string>) => void;
@@ -10,6 +10,13 @@ interface NavbarProps {
 export default function Navbar({ navigate, goBack }: NavbarProps) {
   const { user, perfil, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') === 'dark' || 
+        (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    return false;
+  });
 
   const isAdmin = perfil?.tipo_usuario === 'admin';
   const isBarbeiro = perfil?.tipo_usuario === 'barbeiro';
@@ -23,6 +30,13 @@ export default function Navbar({ navigate, goBack }: NavbarProps) {
     await logout();
     navigate('index');
     setMenuOpen(false);
+  }
+
+  function toggleTheme() {
+    const newMode = !isDarkMode;
+    setIsDarkMode(newMode);
+    document.documentElement.setAttribute('data-theme', newMode ? 'dark' : 'light');
+    localStorage.setItem('theme', newMode ? 'dark' : 'light');
   }
 
   const linkCliente = (
@@ -91,10 +105,28 @@ export default function Navbar({ navigate, goBack }: NavbarProps) {
                   <span>{perfil?.nome_usuario?.split(' ')[0] || 'Usuário'}</span>
                   <span className="user-badge">{isAdmin ? 'Admin' : isBarbeiro ? 'Barbeiro' : 'Cliente'}</span>
                 </div>
+                <button 
+                  className="nav-link btn-icon" 
+                  onClick={toggleTheme}
+                  aria-label={isDarkMode ? 'Modo claro' : 'Modo escuro'}
+                  title={isDarkMode ? 'Modo claro' : 'Modo escuro'}
+                >
+                  {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
                 <button className="nav-link btn-outline" onClick={handleLogout}>Sair</button>
               </>
             ) : (
-              <button className="nav-link btn-outline" onClick={() => handleNav('auth')}>Entrar</button>
+              <>
+                <button 
+                  className="nav-link btn-icon" 
+                  onClick={toggleTheme}
+                  aria-label={isDarkMode ? 'Modo claro' : 'Modo escuro'}
+                  title={isDarkMode ? 'Modo claro' : 'Modo escuro'}
+                >
+                  {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
+                <button className="nav-link btn-outline" onClick={() => handleNav('auth')}>Entrar</button>
+              </>
             )}
           </div>
 
@@ -109,6 +141,16 @@ export default function Navbar({ navigate, goBack }: NavbarProps) {
       </nav>
 
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px 16px', borderBottom: '1px solid var(--border)' }}>
+          <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Menu</span>
+          <button 
+            className="btn btn-icon btn-secondary" 
+            onClick={toggleTheme}
+            aria-label={isDarkMode ? 'Modo claro' : 'Modo escuro'}
+          >
+            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+        </div>
         {!user && (
           <>
             <button className="nav-link" onClick={() => handleNav('servicos')}>Serviços</button>
@@ -133,20 +175,17 @@ export default function Navbar({ navigate, goBack }: NavbarProps) {
           </>
         )}
         {user && (
-          <div className="mobile-menu" style={{ position: 'static', display: 'flex', flexDirection: 'column', gap: 0, padding: 0, background: 'none', border: 'none' }}>
-            <div className="navbar-user" style={{ padding: '12px 16px', borderTop: '1px solid var(--border)', marginTop: 8 }}>
-              <User size={16} style={{ marginRight: '8px' }} />
-              <span>{perfil?.nome_usuario || 'Usuário'}</span>
-              <span className="user-badge">{isAdmin ? 'Admin' : 'Cliente'}</span>
-            </div>
-            <button className="nav-link" onClick={() => handleNav('perfil')} style={{ margin: '0 0 4px' }}>
-              Perfil
-            </button>
-            <button className="nav-link btn-outline" onClick={handleLogout} style={{ margin: '0 0 4px' }}>
-              <LogOut size={16} style={{ marginRight: '8px' }} />
-              Sair
-            </button>
+          <div className="navbar-user" style={{ padding: '12px 16px', borderTop: '1px solid var(--border)', marginTop: 8 }}>
+            <User size={16} style={{ marginRight: '8px' }} />
+            <span>{perfil?.nome_usuario || 'Usuário'}</span>
+            <span className="user-badge">{isAdmin ? 'Admin' : 'Cliente'}</span>
           </div>
+        )}
+        {user && (
+          <button className="nav-link btn-outline" onClick={handleLogout} style={{ margin: '12px 16px' }}>
+            <LogOut size={16} style={{ marginRight: '8px' }} />
+            Sair
+          </button>
         )}
       </div>
     </>

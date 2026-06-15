@@ -1,10 +1,10 @@
 /* ============================================================
    BarberSync — Sistema de Agendamento para Barbearia
-   CSS Global — Light Theme Moderno com paleta suave
+   CSS Global — Light/Dark Theme Moderno com paleta suave
    ============================================================ */
 
 :root {
-  /* Paleta de cores clara e moderna */
+  /* Paleta de cores clara e moderna (Light Mode - Default) */
   --bg-primary: #fafafa;
   --bg-surface: #ffffff;
   --bg-card: #ffffff;
@@ -55,6 +55,43 @@
   /* Transições suaves */
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --bg-primary: #0f0f11;
+  --bg-surface: #1c1c1e;
+  --bg-card: #1c1c1e;
+  --bg-input: #2c2c2e;
+  --border: #3a3a3c;
+  --border-light: #48484a;
+  
+  /* Cores primárias - tons de âmbar/dourado mais vibrantes no escuro */
+  --color-primary: #d4af52;
+  --color-primary-hover: #c4a045;
+  --color-primary-dim: rgba(212, 175, 82, 0.15);
+  --color-primary-light: rgba(212, 175, 82, 0.08);
+  
+  /* Tipografia */
+  --text-primary: #f5f5f7;
+  --text-secondary: #aeaeb2;
+  --text-muted: #636366;
+  
+  /* Cores de estado (ajustadas para dark mode) */
+  --success: #30d158;
+  --success-bg: rgba(48, 209, 88, 0.15);
+  --error: #ff453a;
+  --error-bg: rgba(255, 69, 58, 0.12);
+  --warning: #ff9f0a;
+  --warning-bg: rgba(255, 159, 10, 0.12);
+  --info: #0a84ff;
+  --info-bg: rgba(10, 132, 255, 0.12);
+  
+  /* Sombras mais sutis no modo escuro */
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  --shadow-sm: 0 2px 12px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.4);
+  --shadow-hover: 0 12px 48px rgba(0, 0, 0, 0.5);
 }
 
 *, *::before, *::after {

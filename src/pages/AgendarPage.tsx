@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import {
   supabase, Barbeiro, Servico,
-  formatarPreco, formatarDuracao, getHojeISO, HORARIOS_FUNCIONAMENTO
+  formatarPreco, formatarDuracao, getHojeISO, getAmanhaISO, HORARIOS_FUNCIONAMENTO
 } from '../lib/supabase';
 import { Calendar, Clock, AlertTriangle, Info, CheckCircle, RotateCcw, Scissors, DollarSign } from 'lucide-react';
 
@@ -34,6 +34,7 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
   const [loading, setLoading] = useState(false);
 
   const hoje = getHojeISO();
+  const amanha = getAmanhaISO();
   const isReagendamento = params.reagendar === '1';
 
   // Verificar se o usuário logado é um barbeiro e obter seu ID
@@ -104,6 +105,7 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
       // 4. Filtrar horários
       const agora = new Date();
       const isHoje = data === hoje;
+      const isAmanha = data === amanha;
 
       const disponiveis = HORARIOS_FUNCIONAMENTO.filter(horario => {
         // Verificar se está ocupado
@@ -116,6 +118,9 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
           horarioDate.setHours(hh, mm, 0, 0);
           if (horarioDate <= agora) return false;
         }
+
+        // Se for amanhã, não mostra nenhum horário (indisponível)
+        if (isAmanha) return false;
 
         // Verificar bloqueios de intervalo
         for (const bloqueio of (bloqueios || [])) {
@@ -137,7 +142,7 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
       setLoadingHorarios(false);
       setHorariosCarregados(true);
     }
-  }, [barbeiroId, data, hoje]);
+  }, [barbeiroId, data, hoje, amanha]);
 
   useEffect(() => {
     if (barbeiroId && data) {
@@ -439,6 +444,11 @@ export default function AgendarPage({ navigate, params = {} }: AgendarPageProps)
                 <div className="horarios-loading">
                   <span className="spinner-sm"></span>
                   Verificando disponibilidade...
+                </div>
+              ) : data === amanha ? (
+                <div className="alert alert-warning">
+                  <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+                  Não é possível agendar para amanhã. Selecione outra data.
                 </div>
               ) : horariosCarregados && horariosDisponiveis.length === 0 ? (
                 <div className="alert alert-warning">

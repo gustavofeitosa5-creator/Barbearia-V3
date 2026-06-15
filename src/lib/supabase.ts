@@ -95,3 +95,9 @@ export function isDataPassada(data: string, hora: string): boolean {
 export function getHojeISO(): string {
   return new Date().toISOString().split('T')[0];
 }
+
+export function getAmanhaISO(): string {
+  const hoje = new Date();
+  hoje.setDate(hoje.getDate() + 1);
+  return hoje.toISOString().split('T')[0];
+}
